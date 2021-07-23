@@ -1,24 +1,16 @@
 const blacklist = require('mailchecker').blacklist();
 const { Resolver } = require('dns').promises;
-const fs = require('fs');
 
 const resolver = new Resolver();
+
 resolver.setServers(['8.8.8.8', '4.4.4.4']);
 
-const outputFile = 'output.txt';
+const print = data => console.log(JSON.stringify(data));
 
-const probe = (domain) => resolver.resolveAny(domain).then(() => {
-    console.log(`${domain} (OK)`)
-    return domain;
-}).catch((err) => console.error(`${domain} (FAIL) ${err.code}`));
+const probe = hostname => resolver.resolveAny(hostname)
+    .then((details) => ({ hostname, details, success: true }))
+    .catch((err) => ({ hostname: err.hostname, error: { code: err.code, syscall: err.syscall }, success: false }));
 
-const write = (content) => {
-    if (typeof content !== 'undefined')
-        fs.writeFile(outputFile, content + '\n', { flag: 'a+' }, () => { });
-};
+const run = hostnames => f => hostnames.reduce((promise, hostname) => promise.then(() => probe(hostname).then(f)), Promise.resolve([]));
 
-const run = (domains, f) => domains.reduce((p, domain) => {
-    return p.then(() => probe(domain).then(f));
-}, Promise.resolve([]));
-
-run(blacklist, write);
+run(blacklist)(print);
