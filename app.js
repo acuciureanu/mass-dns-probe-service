@@ -8,6 +8,6 @@ const dnsProbe = require('./lib/services/dns/probe.service')
 // This is used to get some hostnames to the sake of testing
 const blacklist = require('mailchecker').blacklist();
 
-app.ws('/', (ws) => dnsProbe.perform(blacklist)((message) => ws.send(JSON.stringify(message))));
+app.ws('/', async (ws) => await dnsProbe.perform(blacklist)((results) => ws.send(JSON.stringify(results))));
 
 app.listen(port, () => console.log(`App running on port ${port}`));
