@@ -1,7 +1,7 @@
 {
-  "name": "mailchecker-service",
+  "name": "mass-dns-probe-service",
   "version": "1.0.0",
-  "description": "A service which checks disposable email addresses for the library mailchecker",
+  "description": "A service which performs mass dns probing",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
