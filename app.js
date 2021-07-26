@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 require('express-ws')(app);
 const port = 5000;
-const dnsProbe = require('./lib/services/dns/probe')
+const dnsProbe = require('./lib/services/dns/probe.service')
 
 // TODO Remove when ready.
 // This is used to get some hostnames to the sake of testing
