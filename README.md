@@ -1,4 +1,4 @@
-# bulk-dns-checker
+# Mass DNS Probe Service
 
 ### Install packages
 ```sh
