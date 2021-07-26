@@ -1,16 +1,13 @@
+const express = require('express');
+const app = express();
+require('express-ws')(app);
+const port = 5000;
+const dnsProbe = require('./lib/services/dns/probe')
+
+// TODO Remove when ready.
+// This is used to get some hostnames to the sake of testing
 const blacklist = require('mailchecker').blacklist();
-const { Resolver } = require('dns').promises;
 
-const resolver = new Resolver();
+app.ws('/', (ws) => dnsProbe.perform(blacklist)((message) => ws.send(JSON.stringify(message))));
 
-resolver.setServers(['8.8.8.8', '4.4.4.4']);
-
-const print = data => console.log(JSON.stringify(data));
-
-const probe = hostname => resolver.resolveAny(hostname)
-    .then((details) => ({ hostname, details, success: true }))
-    .catch((err) => ({ hostname: err.hostname, error: { code: err.code, syscall: err.syscall }, success: false }));
-
-const run = hostnames => f => hostnames.reduce((promise, hostname) => promise.then(() => probe(hostname).then(f)), Promise.resolve([]));
-
-run(blacklist)(print);
+app.listen(port, () => console.log(`App running on port ${port}`));
