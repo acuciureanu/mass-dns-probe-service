@@ -1,4 +1,7 @@
 module.exports = {
+    application: {
+        port: 8989,
+    },
     probe:{
         resolve: {
             concurrentTasks: 10,
