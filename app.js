@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 require('express-ws')(app);
-const port = 5000;
+const config = require('./config');
+const port = config.application.port;
 const dns = require('./lib/services/dns/dns.service');
 
 // TODO Remove when ready.
